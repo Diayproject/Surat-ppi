@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8f0ec">
+<title>A Letter for You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fffaf5;--cream:#f8f0ec;--rose:#c9878c;--deep:#865c62;--ink:#59494a;--muted:#9b8584;--line:#ead9d4}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 15% 15%,#fff 0,transparent 35%),linear-gradient(145deg,#f7eeea,#f3e6e3 55%,#f9f2ec);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body:before,body:after{content:"✿";position:fixed;color:#d8b3ae;opacity:.23;font-size:130px;z-index:0;pointer-events:none}
+body:before{top:4%;left:-35px;transform:rotate(-25deg)}body:after{right:-25px;bottom:4%;font-size:170px;transform:rotate(18deg)}
+main{position:relative;z-index:1}
+.screen{min-height:100svh;display:grid;place-items:center;padding:34px 18px}
+.intro{text-align:center;max-width:540px;width:100%}
+.eyebrow{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+h1,h2,.script{font-family:'Cormorant Garamond',serif;font-weight:400}
+h1{font-size:clamp(42px,9vw,70px);line-height:.98;margin:18px 0 12px;color:#76575b}
+.subtitle{font-size:13px;line-height:1.8;color:#927c7b;max-width:340px;margin:0 auto 30px}
+.envelope-wrap{width:min(340px,86vw);height:235px;margin:28px auto 24px;position:relative;perspective:1000px;cursor:pointer;filter:drop-shadow(0 17px 18px #96717425)}
+.envelope{position:absolute;inset:28px 0 0;background:#d8aeb0;border-radius:5px 5px 10px 10px;overflow:visible}
+.envelope:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,#e4c1c0,#c98f95);clip-path:polygon(0 0,50% 57%,100% 0,100% 100%,0 100%);z-index:3}
+.envelope:after{content:"";position:absolute;inset:0;background:linear-gradient(35deg,#c98f95,#e6c5c1);clip-path:polygon(0 100%,50% 45%,100% 100%);z-index:4}
+.flap{position:absolute;inset:0 0 auto;height:60%;background:#e7c5c2;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform 1s cubic-bezier(.2,.7,.2,1);z-index:5}
+.seal{position:absolute;z-index:6;left:50%;top:54%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#a96e78;color:#fff2e9;display:grid;place-items:center;font-size:23px;box-shadow:0 3px 8px #79515845;transition:opacity .35s,transform .5s}
+.letter-peek{position:absolute;z-index:2;left:8%;right:8%;height:175px;bottom:12px;background:#fffaf4;border-radius:4px;transition:transform 1s cubic-bezier(.2,.7,.2,1);display:grid;place-items:center;color:#b17d80;font-family:'Parisienne',cursive;font-size:27px}
+.envelope-wrap.open .flap{transform:rotateX(180deg);z-index:1}
+.envelope-wrap.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+.envelope-wrap.open .letter-peek{transform:translateY(-125px)}
+.tap{font-size:11px;letter-spacing:.12em;color:#9a777a;text-transform:uppercase}
+button{border:0;cursor:pointer;font:inherit}
+.open-btn,.back-btn{background:#93676e;color:#fffaf5;border-radius:99px;padding:13px 25px;font-size:12px;letter-spacing:.08em;box-shadow:0 7px 18px #93676e25;transition:.25s}
+.open-btn:hover,.back-btn:hover{transform:translateY(-2px);background:#805960}
+#letterScreen{display:none;padding-top:55px;padding-bottom:70px}
+.paper{width:min(720px,100%);background:var(--paper);padding:clamp(28px,7vw,68px);border:1px solid #eadbd5;box-shadow:0 22px 70px #795b5b17;position:relative;animation:rise 1s both}
+.paper:before{content:"";position:absolute;inset:12px;border:1px solid #efe2dc;pointer-events:none}
+@keyframes rise{from{opacity:0;transform:translateY(35px) scale(.98)}to{opacity:1;transform:none}}
+.paper-head{text-align:center;margin-bottom:34px}
+.flower{font-size:25px;color:#c58f91}
+.paper h2{font-size:clamp(34px,7vw,49px);color:#805f64;margin:12px 0 4px}
+.to{font-family:'Parisienne',cursive;font-size:25px;color:#b47d83;margin:12px 0 0}
+.letter-body{font-family:'Cormorant Garamond',serif;font-size:21px;line-height:1.72;color:#625354;white-space:pre-line}
+.letter-body p{margin:0 0 18px}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:32px 0}
+.photo{aspect-ratio:4/5;background:#f0e3df;border:1px solid #ead8d3;overflow:hidden;position:relative;display:grid;place-items:center;color:#a98b89;text-align:center;font-size:11px;padding:12px}
+.photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.photo span{position:relative;z-index:1;background:#fffaf0bb;padding:6px 9px;border-radius:20px}
+.closing{font-family:'Parisienne',cursive;font-size:30px;color:#986c73;text-align:right;margin-top:28px}
+.signature{text-align:right;color:#9b8584;font-size:11px;margin-top:6px}
+.footer{text-align:center;margin:28px auto 0;color:#a18d8a;font-size:10px;letter-spacing:.12em}
+.controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px}
+.back-btn{background:transparent;color:#89666b;border:1px solid #d9bdba;box-shadow:none}
+@media(max-width:520px){.gallery{grid-template-columns:repeat(2,1fr)}.gallery .photo:last-child{display:none}.letter-body{font-size:19px}.envelope-wrap{height:220px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<section class="screen" id="welcome">
+  <div class="intro">
+    <div class="eyebrow">a little something, made for you</div>
+    <h1>A Letter<br><span class="script">for You</span></h1>
+    <p class="subtitle">Ada beberapa hal yang ingin kusampaikan. Jadi, kali ini kutuliskan dalam sebuah surat kecil.</p>
+    <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Buka amplop">
+      <div class="letter-peek">for someone special</div>
+      <div class="envelope"><div class="flap"></div><div class="seal">✿</div></div>
+    </div>
+    <div class="tap">sent with a little warmth</div>
+    <div style="margin-top:22px"><button class="open-btn" id="openBtn">Buka surat</button></div>
+  </div>
+</section>
+
+<section class="screen" id="letterScreen">
+  <article class="paper">
+    <header class="paper-head">
+      <div class="flower">❀</div>
+      <div class="eyebrow">a letter, from my heart</div>
+      <h2>Untuk seseorang yang istimewa</h2>
+      <div class="to">Dear, Nama Panggilan</div>
+    </header>
+
+    <div class="letter-body">
+      <p>Ada hal-hal yang rasanya lebih mudah disampaikan ketika diberi ruang untuk dituliskan. Bukan karena kata-katanya selalu sempurna, tetapi karena ada perasaan yang ingin kusampaikan dengan lebih utuh.</p>
+      <p>Aku ingin kamu tahu bahwa kehadiranmu punya arti. Mungkin tidak setiap waktu aku pandai menunjukkannya, dan mungkin ada banyak hal sederhana yang luput untuk kusampaikan. Tetapi, aku menghargai cerita, waktu, dan bagian-bagian kecil dari perjalanan yang pernah kita bagi.</p>
+      <p>Hidup tidak selalu berjalan dengan ringan. Ada hari-hari yang terasa panjang, ada hal yang belum selesai, dan ada bagian dari diri kita yang masih terus belajar. Aku harap kamu tidak terlalu keras kepada dirimu sendiri. Semoga kamu tetap memberi ruang untuk bertumbuh, beristirahat, dan menemukan hal-hal baik di sepanjang perjalananmu.</p>
+      <p>Terima kasih sudah menjadi bagian dari cerita ini. Aku tidak tahu bagaimana hari-hari ke depan akan berjalan, tetapi aku berharap kamu selalu menemukan alasan untuk melanjutkan langkah dengan hati yang lebih lapang.</p>
+      <p>Surat ini mungkin sederhana. Namun, semoga saat kamu membacanya, kamu bisa merasakan bahwa ada seseorang yang sungguh-sungguh ingin menyampaikan hal baik untukmu.</p>
+    </div>
+
+    <div class="gallery" aria-label="Galeri foto kenangan">
+      <div class="photo"><img src="foto/foto-1.jpg" alt="" onerror="this.remove()"><span>Letakkan foto 1 di folder foto</span></div>
+      <div class="photo"><img src="foto/foto-2.jpg" alt="" onerror="this.remove()"><span>Letakkan foto 2 di folder foto</span></div>
+      <div class="photo"><img src="foto/foto-3.jpg" alt="" onerror="this.remove()"><span>Letakkan foto 3 di folder foto</span></div>
+    </div>
+
+    <div class="closing">With warmth,</div>
+    <div class="signature">Nama pengirim</div>
+    <div class="footer">A SMALL LETTER, TO BE KEPT</div>
+  </article>
+  <div class="controls">
+    <button class="back-btn" id="backBtn">Kembali ke amplop</button>
+  </div>
+</section>
+</main>
+<script>
+const envelope=document.getElementById('envelope');
+const welcome=document.getElementById('welcome');
+const letter=document.getElementById('letterScreen');
+const openBtn=document.getElementById('openBtn');
+function openLetter(){
+  envelope.classList.add('open');
+  openBtn.disabled=true;
+  openBtn.textContent='Membuka surat…';
+  setTimeout(()=>{
+    welcome.style.display='none';
+    letter.style.display='grid';
+    window.scrollTo({top:0,behavior:'smooth'});
+  },950);
+}
+openBtn.addEventListener('click',openLetter);
+envelope.addEventListener('click',openLetter);
+envelope.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLetter();}});
+document.getElementById('backBtn').addEventListener('click',()=>{
+  letter.style.display='none';welcome.style.display='grid';
+  envelope.classList.remove('open');openBtn.disabled=false;openBtn.textContent='Buka surat';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+</body>
+</html>
